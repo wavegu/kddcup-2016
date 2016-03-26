@@ -1,4 +1,5 @@
 import sys
+sys.dont_write_bytecode = True
 
 import json
 import codecs
@@ -12,8 +13,6 @@ from MachineLearning import MachineLearning
 from util import YEAR_LIST
 
 sys.dont_write_bytecode = True
-
-
 train = MachineLearning()
 
 

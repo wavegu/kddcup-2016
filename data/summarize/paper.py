@@ -1,7 +1,6 @@
 # encoding=utf-8
 import sys
 sys.dont_write_bytecode = True
-
 import json
 import codecs
 from os.path import join
