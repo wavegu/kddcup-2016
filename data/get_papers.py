@@ -13,7 +13,7 @@ with open('/home/share/MAG/Papers.txt') as f:
         while line:
             counter += 1
             if counter % 10000000 == 0:
-                print counter / 10000000, '0M'
+                print(counter / 10000000, '0M')
             parts = line.split('\t')
             if parts[-2] in conf_ids:
                 try:

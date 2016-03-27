@@ -22,7 +22,7 @@ def get_author_to_affs_dict():
         while line:
             counter += 1
             if counter % 1000000 == 0:
-                print counter / 1000000, 'M'
+                print(counter / 1000000, 'M')
             parts = line.split('\t')
             auth_id = parts[1]
             affi_id = parts[2]
@@ -58,7 +58,7 @@ def sample_paper_author_aff():
             while raw_line:
                 tot_counter += 1
                 if tot_counter % 10000000 == 0:
-                    print 'raw line:', tot_counter / 1000000, 'M'
+                    print('raw line:', tot_counter / 1000000, 'M')
                 line = ''
                 parts = raw_line.split('\t')
                 aff_id = parts[2]
@@ -69,7 +69,7 @@ def sample_paper_author_aff():
                         line += str(part) + '\t'
                     wf.write(line[:-1])
                     if counter % 1000000 == 0:
-                        print 'select line:', counter / 1000000, 'M'
+                        print('select line:', counter / 1000000, 'M')
                 raw_line = f.readline()
 
 
@@ -85,11 +85,11 @@ def select_kddcup_paper_auth_aff():
             while raw_line:
                 tot_counter += 1
                 if tot_counter % 1000000 == 0:
-                    print 'total:', tot_counter / 1000000, 'M'
+                    print('total:', tot_counter / 1000000, 'M')
                 if raw_line.split('\t')[0] in paper_ids:
                     counter += 1
                     if counter % 100000 == 0:
-                        print 'select:', counter
+                        print('select:', counter)
                     wf.write(raw_line)
                 raw_line = f.readline()
 
@@ -116,4 +116,3 @@ def classify_selected_papers():
                 f.write(paper_line)
 
 
-get_author_to_affs_dict()

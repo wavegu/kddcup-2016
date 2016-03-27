@@ -4,6 +4,8 @@ from util import create_if_not_exist
 from util import CONF_NAME_LIST
 from os.path import join
 
+RESULT_FILENAME = 'results.tsv'
+
 
 def log_factor(i):
     import math
@@ -84,8 +86,5 @@ def evaluate():
         print content
         f.write(content)
 
-RESULT_FILENAME = 'results.tsv'
 evaluate()
-
-RESULT_FILENAME = 'backup_results.tsv'
-evaluate()
+# print get_conf_to_ndcg_dict(2014)['SIGIR']

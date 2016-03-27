@@ -26,7 +26,7 @@ class Affiliation:
         affs = json.load(f)
         f.close()
         for aff_dict in affs:
-            aff_id_name_dict[aff_dict.keys()[0]] = aff_dict.values()[0]
+            aff_id_name_dict[list(aff_dict.keys())[0]] = list(aff_dict.values())[0]
         return aff_id_name_dict
 
     @classmethod

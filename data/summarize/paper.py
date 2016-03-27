@@ -13,7 +13,7 @@ class Paper:
     __dir__ = 'paper'
     # __selected_papers_phase1_path__ = join('..', 'sample', 'selected_papers_phase1.txt')
     __selected_papers_phase1_path__ = join('..', 'sample', 'selected_papers_phase1.txt')
-    __selected_papers_auth_aff_path__ = join('..', 'sample', 'selected_paper_auth_aff.txt')
+    __selected_papers_auth_aff_path__ = join('..', 'sample', 'selected_paper_auth_aff_100.txt')
     create_if_not_exist(__dir__)
 
     @classmethod

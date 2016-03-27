@@ -9,7 +9,11 @@ from aff import SELECTED_AFF_LIST
 from aff import AFF_ID_TO_NAME_DICT
 from util import get_conf_name_id_dict
 from util import create_if_not_exist
+from MachineLearning import MachineLearning
 from util import YEAR_LIST
+
+sys.dont_write_bytecode = True
+train = MachineLearning()
 
 
 class Rank:
