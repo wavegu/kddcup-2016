@@ -22,7 +22,7 @@ class Affiliation:
     @classmethod
     def get_selected_aff_id_name_dict(cls):
         aff_id_name_dict = {}
-        f = codecs.open(join('..', 'sample', 'top_affs.json'), 'r', 'utf8')
+        f = codecs.open(join('..', 'sample', 'top_affs_100.json'), 'r', 'utf8')
         affs = json.load(f)
         f.close()
         for aff_dict in affs:
@@ -35,7 +35,7 @@ class Affiliation:
         aff_paper_set_dict = {}
         aff_tot_paper_num_dict = {}
         selected_aff_list = SELECTED_AFF_LIST
-        f = codecs.open(join('..', 'sample', 'selected_paper_auth_aff.txt'), 'r', 'utf8')
+        f = codecs.open(join('..', 'sample', 'selected_paper_auth_aff_100.txt'), 'r', 'utf8')
         lines = f.readlines()
         f.close()
 
@@ -98,6 +98,32 @@ class Affiliation:
                     for aff_id in involved_affs:
                         if aff_id in SELECTED_AFF_LIST:
                             aff_conf_year_to_kdd_score_dict[aff_id][conf_name][year] += float(1) / float(author_num * len(involved_affs))
+
+        # 整理成每个会议每年各机构的kdd score情况
+        conf_year_aff_to_score_dict = {}
+        for aff, conf_year_to_kdd_score_dict in aff_conf_year_to_kdd_score_dict.items():
+            for conf, year_to_score_dict in conf_year_to_kdd_score_dict.items():
+                if conf not in conf_year_aff_to_score_dict:
+                    conf_year_aff_to_score_dict[conf] = {}
+                for year, score in year_to_score_dict.items():
+                    if year not in conf_year_aff_to_score_dict[conf]:
+                        conf_year_aff_to_score_dict[conf][year] = {}
+                    conf_year_aff_to_score_dict[conf][year][aff] = score
+
+        # 排序
+        conf_year_to_aff_rank = {}
+        for conf, year_aff_to_score_dict in conf_year_aff_to_score_dict.items():
+            if conf not in conf_year_to_aff_rank:
+                conf_year_to_aff_rank[conf] = {}
+            for year, aff_to_score_dict in year_aff_to_score_dict.items():
+                aff_score_rank = sorted(aff_to_score_dict.items(), key=lambda x: x[1], reverse=True)
+                conf_year_to_aff_rank[conf][year] = [(aff_score_pair[0], AFF_ID_TO_NAME_DICT[aff_score_pair[0]], aff_score_pair[1]) for aff_score_pair in aff_score_rank]
+
+        with open(join('affiliation', 'aff_conf_year_to_kdd_score_100.json'), 'w') as f:
+            f.write(json.dumps(aff_conf_year_to_kdd_score_dict, indent=4))
+
+        with open(join('affiliation', 'conf_year_to_aff_rank_100.json'), 'w') as f:
+            f.write(json.dumps(conf_year_to_aff_rank, indent=4))
 
         return aff_conf_year_to_kdd_score_dict
 

@@ -11,11 +11,12 @@ import json
 #     paper_ids = [paper_line.split('\t')[0] for paper_line in paper_lines]
 
 def get_author_to_affs_dict():
-    with open('sample/top_affs.json') as f:
-        affs = json.load(f)
-        selected_aff_ids = [str(aff.split(' ')[0]) for aff in affs]
+    print 'sampling author to affs dict...'
+    with open('/home/share/MAG/2016KDDCupSelectedAffiliations.txt') as f:
+        lines = f.readlines()
+        selected_aff_ids = [str(line.split('\t')[0]) for line in lines]
     author_to_affs_dict = {}
-    with open('MAG/PaperAuthorAffiliations.txt') as f:
+    with open('/home/share/MAG/PaperAuthorAffiliations.txt') as f:
         line = f.readline()
         counter = 0
         while line:
@@ -38,12 +39,17 @@ def get_author_to_affs_dict():
             for aff in affs:
                 wf.write(aff + '\t')
             wf.write('\n')
+    with open('author_to_affs.json', 'w') as wf:
+        wf.write(json.dumps(author_to_affs_dict, indent=4))
+
+    print 'sampling author to affs dict ok'
 
 
 def sample_paper_author_aff():
-    from os.path import join
-    aff_ids = json.load(open(join('sample', 'top_affs.json')))
-    aff_ids = [aff.keys()[0] for aff in aff_ids]
+    print 'sampling paper author aff dict...'
+    with open('/home/share/MAG/2016KDDCupSelectedAffiliations.txt') as f:
+        lines = f.readlines()
+        selected_aff_ids = [str(line.split('\t')[0]) for line in lines]
     with open('/home/share/MAG/PaperAuthorAffiliations.txt') as f:
         with open('sample/selected_paper_auth_aff.txt', 'w') as wf:
             raw_line = f.readline()
@@ -56,7 +62,7 @@ def sample_paper_author_aff():
                 line = ''
                 parts = raw_line.split('\t')
                 aff_id = parts[2]
-                if aff_id in aff_ids:
+                if aff_id in selected_aff_ids:
                     counter += 1
                     selected_parts = parts[:3] + parts[4:]
                     for part in selected_parts:
@@ -110,8 +116,4 @@ def classify_selected_papers():
                 f.write(paper_line)
 
 
-
-
-# classify_selected_papers()
-# select_kddcup_paper_auth_aff()
-sample_paper_author_aff()
+get_author_to_affs_dict()
