@@ -41,10 +41,47 @@ class Affiliation:
         return affid_to_name_dict
 
     @classmethod
+    def get_top_100_aff_id_name_dict(cls):
+        aff_id_name_dict = {}
+        with open(join(DATA_DIR, 'top_affs_100.json')) as f:
+            aff_id_name_list = json.load(f)
+        for aff_dict in aff_id_name_list:
+            aff_id = aff_dict.keys()[0]
+            aff_id_name_dict[aff_id] = aff_dict[aff_id]
+        return aff_id_name_dict
+
+    @classmethod
+    def get_aff_to_author_num_dict(cls, use_cache=True):
+        o_aff_to_author_num_path = join(cls.__dir__, 'aff_to_author_num.json')
+
+        if use_cache and os.path.exists(o_aff_to_author_num_path):
+            with open(o_aff_to_author_num_path) as f:
+                return json.load(f)
+
+        aff_to_authors_dict = {}
+        aff_to_author_num_dict = {}
+        author_to_affs_dict = Author.get_author_affids_dict()
+        for author, affs in author_to_affs_dict.items():
+            for aff in affs:
+                if not aff:
+                    continue
+                if aff not in aff_to_authors_dict:
+                    aff_to_authors_dict[aff] = []
+                aff_to_authors_dict[aff].append(author)
+        for aff in aff_to_authors_dict.keys():
+            aff_to_authors_dict[aff] = list(set(aff_to_authors_dict[aff]))
+            aff_to_author_num_dict[aff] = len(aff_to_authors_dict[aff])
+
+        with open(o_aff_to_author_num_path, 'w') as f:
+            f.write(json.dumps(aff_to_author_num_dict, indent=4))
+
+        return aff_to_author_num_dict
+
+
+    @classmethod
     def get_aff_to_paper_num_dict(cls, use_cache=True):
 
         o_aff_to_paper_num_path = join(cls.__dir__, 'aff_to_paper_num.json')
-        print o_aff_to_paper_num_path
 
         if use_cache and os.path.exists(o_aff_to_paper_num_path):
             with open(o_aff_to_paper_num_path) as f:
@@ -128,9 +165,9 @@ class Affiliation:
         return aff_conf_year_to_kdd_score_dict
 
     @classmethod
-    def get_conf_year_aff_to_score_dict(cls, use_cache=True):
+    def get_conf_year_aff_to_kdd_score_dict(cls, use_cache=True):
 
-        o_conf_year_aff_to_score_path = join(cls.__dir__, 'conf_year_to_aff_rank_by_kdd_score.json')
+        o_conf_year_aff_to_score_path = join(cls.__dir__, 'conf_year_aff_to_kdd_score.json')
 
         if use_cache and os.path.exists(o_conf_year_aff_to_score_path):
             with open(o_conf_year_aff_to_score_path) as f:
@@ -164,7 +201,7 @@ class Affiliation:
 
         # 排序
         conf_year_to_aff_rank = {}
-        conf_year_aff_to_score_dict = cls.get_conf_year_aff_to_score_dict()
+        conf_year_aff_to_score_dict = cls.get_conf_year_aff_to_kdd_score_dict()
         for conf, year_aff_to_score_dict in conf_year_aff_to_score_dict.items():
             if conf not in conf_year_to_aff_rank:
                 conf_year_to_aff_rank[conf] = {}
@@ -178,10 +215,11 @@ class Affiliation:
         return conf_year_to_aff_rank
 
 
-AFF_ID_TO_NAME_DICT = Affiliation.get_aff_id_name_dict()
+AFF_ID_TO_NAME_DICT = Affiliation.get_top_100_aff_id_name_dict()
 AFFID_LIST = list(AFF_ID_TO_NAME_DICT.keys())
 
 
 if __name__ == '__main__':
-    Affiliation.get_conf_year_to_aff_rank_by_kdd_score_dict()
-    Affiliation.get_aff_to_paper_num_dict()
+    # Affiliation.get_conf_year_to_aff_rank_by_kdd_score_dict()
+    # Affiliation.get_aff_to_paper_num_dict()
+    Affiliation.get_conf_year_aff_to_kdd_score_dict(False)
