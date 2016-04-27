@@ -42,3 +42,7 @@ MAG_DIR = join(KDDCUP_DIR, 'MAG')
 # MAG_SAMPLE_DIR = '/home/share/MAG'
 MAG_SAMPLE_DIR = join(MAG_DIR, 'sample')
 MAG_SAMPLE_PAPER_AUTHOR_AFFS_PATH = join(MAG_SAMPLE_DIR, 'kdd_PaperAuthorAffiliations.txt')
+
+RESULT_DIR = join(PHASE2_DIR, 'result')
+RESULT_FILE_PATH = join(RESULT_DIR, 'result.tsv')
+create_if_not_exist(RESULT_DIR)

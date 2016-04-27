@@ -23,7 +23,7 @@ class Ranker:
 
         def get_feature_line(affid, conf, seq, year):
 
-            feature_line = '%d qid=%d' % (seq, conf_qid_dict[conf] + 10 * year)
+            feature_line = '%d qid:%d' % (101 - seq, conf_qid_dict[conf] + 10 * year)
             author_num = self.aff_to_author_num_dict[affid]
             paper_num = self.aff_to_paper_num_dict[affid]
             year_aff_to_score_dict = self.conf_year_aff_to_score_dict[conf]
@@ -44,7 +44,7 @@ class Ranker:
             ]
 
             for looper in range(len(feature_list)):
-                feature_line += ' %d:%s' % (looper, str(feature_list[looper]))
+                feature_line += ' %d:%s' % (looper+1, str(feature_list[looper]))
 
             return feature_line
 
